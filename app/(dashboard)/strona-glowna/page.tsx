@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { FileText, Users, Clock, TrendingUp, ArrowRight, Plus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../components/ui/button";
 
 interface Stats {
   totalRecords: number;

@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import { FileText, RefreshCw, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 
 interface ActivityLog {
   id: string;

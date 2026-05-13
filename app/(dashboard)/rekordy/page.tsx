@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import {
   Plus,
   Trash2,
@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "../../../components/ui/checkbox";
 
 const MONTHS: Record<number, string> = {
   1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień",

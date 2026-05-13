@@ -1,9 +1,9 @@
 "use client";
 
-import { RecordForm } from "@/components/record-form";
+import { RecordForm } from "../../../../components/record-form";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 
 export default function NewRecordPage() {
   return (

@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Download, Upload, Database, AlertCircle, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../components/ui/button";
 
 export default function BackupPage() {
   const [isExporting, setIsExporting] = useState(false);

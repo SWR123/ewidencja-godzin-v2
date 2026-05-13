@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/db";
-import { logActivity } from "@/lib/activity-logger";
+import { authOptions } from "../../../../lib/auth-options";
+import { prisma } from "../../../../lib/db";
+import { logActivity } from "../../../../lib/activity-logger";
 import * as XLSX from "xlsx";
 
 export const dynamic = "force-dynamic";

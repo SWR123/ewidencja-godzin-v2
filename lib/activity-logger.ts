@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "../lib/db";
 
 const ADMIN_EMAIL = "admin@ewidencja.pl";
 

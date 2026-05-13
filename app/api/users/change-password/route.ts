@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/db";
+import { authOptions } from "../../../../lib/auth-options";
+import { prisma } from "../../../../lib/db";
 import bcrypt from "bcryptjs";
-import { logActivity } from "@/lib/activity-logger";
+import { logActivity } from "../../../../lib/activity-logger";
 
 export const dynamic = "force-dynamic";
 

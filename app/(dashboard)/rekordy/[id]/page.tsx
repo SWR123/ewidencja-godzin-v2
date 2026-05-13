@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { RecordForm } from "@/components/record-form";
+import { RecordForm } from "../../../../components/record-form";
 import { ArrowLeft, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../../components/ui/button";
 
 export default function EditRecordPage() {
   const params = useParams();

@@ -4,9 +4,9 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Clock, LogOut, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useSidebar } from "@/components/sidebar-provider";
+import { Button } from "../components/ui/button";
+import { cn } from "../lib/utils";
+import { useSidebar } from "../components/sidebar-provider";
 
 const ADMIN_EMAIL = "admin@ewidencja.pl";
 

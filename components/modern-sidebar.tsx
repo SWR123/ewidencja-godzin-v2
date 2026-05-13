@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { useSidebar } from "@/components/sidebar-provider";
+import { useSidebar } from "../components/sidebar-provider";
 import {
   Home,
   FileText,
