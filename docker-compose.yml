@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Aplikacja Next.js (produkcyjna)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ewidencja_app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ewidencja}:${POSTGRES_PASSWORD:-ewidencja123}@ewidencja_postgres:5432/${POSTGRES_DB:-ewidencja_db}?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3001}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NODE_ENV: production
+    ports:
+      - "3001:3000"
+    volumes:
+      - app_uploads:/app/uploads
+    networks:
+      - ewidencja_godzin
+    command: sh -c "npx prisma db push --accept-data-loss && yarn start"
+
+volumes:
+  app_uploads:
+    driver: local
+
+networks:
+  ewidencja_godzin:
+    external: true

@@ -1,0 +1,39 @@
+# Obraz bazowy Node.js 18 (wersja Alpine - lekka)
+FROM node:20-alpine
+
+# Instalacja niezbędnych narzędzi systemowych
+RUN apk add --no-cache libc6-compat openssl bash
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Kopiowanie plików konfiguracyjnych package.json i yarn.lock
+COPY nextjs_space/package.json nextjs_space/yarn.lock* ./
+
+# Instalacja wszystkich zależności projektu
+RUN yarn install --frozen-lockfile
+
+# Kopiowanie całego kodu źródłowego aplikacji
+COPY nextjs_space/ .
+
+# Generowanie klienta bazy danych Prisma
+RUN yarn prisma generate
+
+# Budowanie aplikacji Next.js w trybie produkcyjnym
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV NEXT_TYPESCRIPT_CHECK=false
+
+RUN yarn build
+
+# Utworzenie katalogu dla przesyłanych plików
+RUN mkdir -p uploads public
+
+# Ustawienie portu, na którym będzie działać aplikacja
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Uruchomienie aplikacji w trybie produkcyjnym
+CMD ["yarn", "start"]
