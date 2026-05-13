@@ -1,14 +1,10 @@
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { compare } from 'bcryptjs';
 import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
 import { prisma } from './db';
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -33,14 +29,14 @@ export const authOptions: NextAuthOptions = {
           }
 
           const isValid = await compare(credentials.password as string, user.password || '');
-          
+
           if (!isValid) {
             console.log('[AUTH] Invalid password for:', credentials.email);
             return null;
           }
 
-          console.log('[AUTH] Login successful for:', user.email, 'requirePasswordReset:', user.requirePasswordReset);
-          
+          console.log('[AUTH] Login successful for:', user.email, 'role:', user.role, 'requirePasswordReset:', user.requirePasswordReset);
+
           return {
             id: user.id,
             email: user.email,
@@ -49,7 +45,7 @@ export const authOptions: NextAuthOptions = {
             requirePasswordReset: user.requirePasswordReset,
           };
         } catch (error: any) {
-          console.error('[AUTH] Error during login:', error);
+          console.error('[AUTH] Error:', error);
           throw error;
         }
       },
@@ -61,10 +57,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const u = user as any;
-        token.id = u.id;
-        token.role = u.role;
-        token.requirePasswordReset = u.requirePasswordReset;
+        token.id = (user as any).id;
+        token.role = (user as any).role;
+        token.requirePasswordReset = (user as any).requirePasswordReset;
       }
       return token;
     },
@@ -76,17 +71,11 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async signIn({ user, account }) {
-      if (account?.provider === 'credentials') {
-        if ((user as any).requirePasswordReset) {
-          return '/zmiana-hasla';
-        }
-        return true;
-      }
-      return true;
-    },
     async redirect({ url, baseUrl }) {
-      if (url.includes('/zmiana-hasla')) {
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+      if (url.startsWith(baseUrl)) {
         return url;
       }
       return baseUrl;

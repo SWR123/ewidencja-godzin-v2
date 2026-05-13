@@ -9,7 +9,7 @@ import { Label } from "../../../components/ui/label";
 import { Loader2, Lock, Eye, EyeOff } from "lucide-react";
 
 export default function ChangePasswordPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,14 +20,9 @@ export default function ChangePasswordPage() {
 
   useEffect(() => {
     if (status === "loading") return;
-
     if (!session) {
       router.push("/logowanie");
-      return;
     }
-
-    // Stay on page if password reset is required OR if user just completed it
-    // Only redirect if session exists and explicitly not requiring reset AND not on this page intentionally
   }, [session, status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,8 +59,9 @@ export default function ChangePasswordPage() {
       });
 
       if (response.ok) {
-        // Redirect to dashboard
-        router.push("/");
+        // Odśwież token JWT żeby requirePasswordReset = false
+        await update({ requirePasswordReset: false });
+        router.push("/strona-glowna");
       } else {
         const errorData = await response.json();
         setError(errorData?.error || "Wystąpił błąd podczas zmiany hasła");
