@@ -20,8 +20,6 @@ interface ActivityLog {
   createdAt: string;
 }
 
-const ADMIN_EMAIL = "admin@ewidencja.pl";
-
 export default function LogiPage() {
   const { data: session, status } = useSession() || {};
   const router = useRouter();
@@ -34,7 +32,7 @@ export default function LogiPage() {
     if (status === "loading") return;
     
     // Redirect if not admin
-    if (session?.user?.email !== ADMIN_EMAIL) {
+    if ((session?.user as any)?.role !== 'SUPERVISOR' && (session?.user as any)?.role !== 'ADMIN') {
       router.replace("/strona-glowna");
       return;
     }
@@ -75,7 +73,7 @@ export default function LogiPage() {
     }
   };
 
-  if (status === "loading" || session?.user?.email !== ADMIN_EMAIL) {
+  if (status === "loading" || ((session?.user as any)?.role !== 'SUPERVISOR' && (session?.user as any)?.role !== 'ADMIN')) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
