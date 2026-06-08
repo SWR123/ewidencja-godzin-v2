@@ -1,6 +1,4 @@
-import { prisma } from "../lib/db";
-
-const ADMIN_EMAIL = "admin@ewidencja.pl";
+import { prisma } from "./db";
 
 export async function logActivity(
   userId: string,
@@ -9,11 +7,6 @@ export async function logActivity(
   action: string,
   details?: string
 ) {
-  // Don't log activities for the admin user
-  if (userEmail === ADMIN_EMAIL) {
-    return;
-  }
-
   try {
     await prisma.activityLog.create({
       data: {
@@ -27,8 +20,4 @@ export async function logActivity(
   } catch (error) {
     console.error("Failed to log activity:", error);
   }
-}
-
-export function isAdminUser(email: string | null | undefined): boolean {
-  return email === ADMIN_EMAIL;
 }

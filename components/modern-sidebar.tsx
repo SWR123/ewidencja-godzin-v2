@@ -16,13 +16,12 @@ import {
   X,
 } from "lucide-react";
 
-const ADMIN_EMAIL = "admin@ewidencja.pl";
-
 export function ModernSidebar() {
   const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
   const pathname = usePathname();
   const { data: session } = useSession();
-  const isAdmin = session?.user?.email === ADMIN_EMAIL;
+  const userRole = (session?.user as any)?.role;
+  const isAdmin = userRole === 'SUPERVISOR' || userRole === 'ADMIN';
 
   const navItems = [
     { icon: Home, label: "Strona główna", href: "/strona-glowna" },
