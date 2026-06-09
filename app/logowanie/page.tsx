@@ -154,7 +154,7 @@ export default function LoginPage() {
           {/* RK Link */}
           <div className="flex justify-center mt-8">
             <a
-              href="https://kasa-kreator.lovable.app"
+              href="https://kasa.osirbrodnica.site"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors"
