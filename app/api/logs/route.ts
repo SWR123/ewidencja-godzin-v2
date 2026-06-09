@@ -14,8 +14,9 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Only admin can view logs
-    if (!isAdminUser(session.user.email)) {
+    // Only admin/supervisor can view logs
+    const userRole = (session.user as any)?.role;
+    if (!isAdminUser(session.user.email, userRole)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
