@@ -182,7 +182,11 @@ export default function RecordsPage() {
       const response = await fetch("/api/records/generate-docx", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordIds: selectedIds }),
+        body: JSON.stringify({
+          recordIds: selectedIds,
+          sortField,
+          sortDirection,
+        }),
       });
 
       if (response?.ok) {
@@ -237,7 +241,11 @@ export default function RecordsPage() {
       const response = await fetch("/api/records/generate-xlsx", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordIds: selectedIds }),
+        body: JSON.stringify({
+          recordIds: selectedIds,
+          sortField,
+          sortDirection,
+        }),
       });
 
       if (response?.ok) {

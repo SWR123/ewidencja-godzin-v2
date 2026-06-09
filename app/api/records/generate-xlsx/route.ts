@@ -14,15 +14,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { recordIds } = await request.json();
+    const { recordIds, sortField, sortDirection } = await request.json();
 
     if (!recordIds || !Array.isArray(recordIds) || recordIds.length === 0) {
       return NextResponse.json({ error: "No record IDs provided" }, { status: 400 });
     }
 
+    // Build dynamic orderBy based on user-selected sort
+    const allowedSortFields = ["nazwisko", "imie", "sprawa", "suma", "recordMonth", "recordYear", "createdAt"];
+    const safeSortField = allowedSortFields.includes(sortField) ? sortField : "nazwisko";
+    const safeSortDirection = sortDirection === "desc" ? "desc" : "asc";
+
     const records = await prisma.record.findMany({
       where: { id: { in: recordIds } },
-      orderBy: { nazwisko: "asc" },
+      orderBy: { [safeSortField]: safeSortDirection },
     });
 
     // Przygotuj dane do arkusza

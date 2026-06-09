@@ -425,14 +425,19 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { recordIds } = body;
+    const { recordIds, sortField, sortDirection } = body;
 
     if (!recordIds || !Array.isArray(recordIds) || recordIds.length === 0) {
       return NextResponse.json(
-        { error: "Brak identyfikatorów rekordów" },
+        { error: "Brak ID rekordów" },
         { status: 400 }
       );
     }
+
+    // Build dynamic orderBy based on user-selected sort
+    const allowedSortFields = ["nazwisko", "imie", "sprawa", "suma", "recordMonth", "recordYear", "createdAt"];
+    const safeSortField = allowedSortFields.includes(sortField) ? sortField : "nazwisko";
+    const safeSortDirection = sortDirection === "desc" ? "desc" : "asc";
 
     // Fetch records
     const records = await prisma.record.findMany({
@@ -441,6 +446,7 @@ export async function POST(req: Request) {
           in: recordIds,
         },
       },
+      orderBy: { [safeSortField]: safeSortDirection },
     });
 
     if (records.length === 0) {
