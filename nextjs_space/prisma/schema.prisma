@@ -1,0 +1,142 @@
+enum Role {
+  USER
+  SUPERVISOR
+  ADMIN
+}
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  role Role @default(USER)
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  emailVerified         DateTime?
+  password              String?
+  image                 String?
+  isActive              Boolean   @default(false)
+  activationToken       String?   @unique
+  requirePasswordReset  Boolean   @default(false)
+  accounts              Account[]
+  sessions              Session[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  userName  String
+  userEmail String
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+  
+  @@index([createdAt])
+  @@index([userEmail])
+}
+
+model Settings {
+  id           String   @id @default("global")
+  activeMonth  Int      @default(1)
+  activeYear   Int      @default(2026)
+  updatedAt    DateTime @updatedAt
+}
+
+model Record {
+  id           String   @id @default(cuid())
+  
+  // Active month/year when record was created
+  recordMonth  Int?
+  recordYear   Int?
+  
+  // Case references
+  kow          String?
+  wo           String?
+  ii_k         String?
+  
+  // Personal info
+  nazwisko     String
+  imie         String
+  kod          String?
+  miejscowosc  String?
+  ulica        String?
+  nr_domu      String?
+  nr_lokalu    String?
+  nr_tel       String?
+  miesieczny_wymiar_godzin Int?
+  ilosc_miesiecy Int?
+  startowaLiczbaGodzin Float @default(0)
+  
+  // Dates
+  data1        DateTime?
+  data2        DateTime?
+  
+  // Comments
+  uwagi        String?   @db.Text
+  
+  // Time entries (JSON array of {date, hours})
+  timeEntries  Json?
+  
+  // Calculated sum
+  suma         Float     @default(0)
+  
+  // Selection/marking
+  markedForPrint    Boolean @default(false)
+  markedForDeletion Boolean @default(false)
+  
+  // Archive
+  isArchived   Boolean   @default(false)
+  archivedAt   DateTime?
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([nazwisko])
+  @@index([imie])
+  @@index([createdAt])
+  @@index([isArchived])
+}

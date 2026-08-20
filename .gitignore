@@ -64,3 +64,9 @@ uploads/
 Dockerfile
 docker-compose.yml
 .dockerignore
+# Zabezpieczenie: brak sekretów i kopij zapasowych w repo
+*.env.bak
+*.env*
+!.env.example
+!.*.example
+*.bak
